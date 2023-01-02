@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 module.exports = router;
+const Model = require('../model/model');
 
 //get all the admins
 
@@ -23,4 +24,6 @@ router.patch('/admin/:id', (req, res) => {
 router.delete('/admin/:id', (req, res) => {
     res.send('Delete the admin')
 })
+
+
 

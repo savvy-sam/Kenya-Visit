@@ -1,10 +1,15 @@
 const express = require('express');
 const mongoose= require('mongoose');
 require('dotenv').config();
+const routes = require('./routes/routes');
 
+//express
 
 const app=express();
 app.use(express.json());
+
+
+//Database connection 
 
 const mongoString = process.env.DATABASE_URL;
 
@@ -15,11 +20,14 @@ database.on('error', (error) => {
     console.log(error);
 });
 
-
 database.once('connected', () => {
     console.log('Connection to the database is succesful');
 });
 
+
+//Routes
+
+app.use('/', routes)
 
 const port = process.env.PORT || 3000 ;
 app.listen(port, () => {
