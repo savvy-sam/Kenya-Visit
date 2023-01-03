@@ -1,10 +1,16 @@
 const express = require('express');
 const { findByIdAndUpdate } = require('../model/model');
 const router = express.Router();
+const morgan = require ('morgan');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require("dotenv").config();
+const secret = process.env.SECRET
+
 module.exports = router;
 const Model = require('../model/model');
 
-//get all the admins
+//list all the admins
 
 router.get('/admins', async (req, res) => {
     try{
@@ -17,7 +23,12 @@ router.get('/admins', async (req, res) => {
     }
 });
 
+
 router.post('/admin/create', async (req, res) => {
+
+    req.body.password= await bcrypt.hash(req.body.password, 10);
+    req.body.passwordConfirmation = await bcrypt.hash(req.body.passwordConfirmation, 10);
+
     const data = new Model({
         name: req.body.name,
         email: req.body.email,
@@ -75,5 +86,26 @@ router.delete('/admin/delete/:id', async (req, res) => {
     }
 })
 
+router.post('/admin/login', async (req, res) => {
+    try{
+    //check if the user exists
 
+        const admin = await Model.findOne({email: req.body.email});
+
+        if (admin){
+            const result = await bcrypt.compare(req.body.password, admin.password);
+            if (result){
+                const token= await jwt.sign({username: admin.email}, secret);
+                res.status(200).json({token})
+            } else {
+                res.status(400).json({error: "Incorrect Password!"});
+            }
+        }else{
+         res.status(400).json({error: "This User Does not Exist"});
+        }
+    } catch (error){
+        res.status(500).json({Message: error.message});
+    }
+    
+})
 
