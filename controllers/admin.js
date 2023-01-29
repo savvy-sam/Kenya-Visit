@@ -1,4 +1,4 @@
-require ('dotenv').config ();
+/*require ('dotenv').config ();
 
 const jwt = require('jsonwebtoken');
 const { rawListeners } = require('../model/model');
@@ -40,3 +40,4 @@ const isLogggedIn = async (req, res, next) => {
 module.exports = {
     isLogggedIn()
 }
+*/

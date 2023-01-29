@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const adminSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         required: true,
         type: String
@@ -12,17 +12,37 @@ const adminSchema = new mongoose.Schema({
         unique: true
     },
 
-    password: {
-        required: true,
+    isAdmin: {
+        type: Boolean
+    },
+
+    isSuperAdmin: {
+        type: Boolean
+    },
+
+    imageURL: {
         type: String
     },
 
-    passwordConfirmation: {
-        required: true,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    salt: {
+        type: String
+    },
+
+    hash: {
         type: String
     }
 
 }
 )
 
-module.exports = mongoose.model('Data', adminSchema);
+
+const User = mongoose.model('user', userSchema);
+
+//module.exports = mongoose.model('Data', adminSchema);
+
+module.exports = User;
